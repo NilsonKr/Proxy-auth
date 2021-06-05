@@ -1,6 +1,6 @@
 const passport = require('passport');
 const { BasicStrategy } = require('passport-http');
-const axios = require('axios');
+const axios = require('axios').default;
 
 const config = require('../config/index');
 const boom = require('@hapi/boom');
