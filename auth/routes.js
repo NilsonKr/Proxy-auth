@@ -15,11 +15,13 @@ function authRoutes(app) {
 	const router = express.Router();
 	app.use('/auth', router);
 
+	//Start auth procces with google
 	router.get(
 		'/google-0auth',
 		passport.authenticate('google-oauth', { scope: ['email', 'profile', 'openid'] })
 	);
 
+	//Callback Url
 	router.get(
 		'/google-oauth/callback',
 		passport.authenticate('google-oauth', { session: false }),
