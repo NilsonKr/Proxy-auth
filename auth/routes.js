@@ -17,7 +17,7 @@ function authRoutes(app) {
 
 	//Start auth procces with google
 	router.get(
-		'/google-0auth',
+		'/google-oauth',
 		passport.authenticate('google-oauth', { scope: ['email', 'profile', 'openid'] })
 	);
 
@@ -30,7 +30,7 @@ function authRoutes(app) {
 				next(boom.unauthorized());
 			}
 
-			const { token, ...user } = req.user;
+			const { token, user } = req.user;
 
 			res.cookie('token', token, {
 				httpOnly: !config.dev,
