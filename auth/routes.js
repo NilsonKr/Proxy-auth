@@ -9,7 +9,7 @@ require('./basicStrategy');
 
 // Gooogle OAuth Strategy
 
-require('./oauthStrategy');
+require('./google/openidConnect');
 
 function authRoutes(app) {
 	const router = express.Router();
@@ -18,13 +18,13 @@ function authRoutes(app) {
 	//Start auth procces with google
 	router.get(
 		'/google-oauth',
-		passport.authenticate('google-oauth', { scope: ['email', 'profile', 'openid'] })
+		passport.authenticate('google', { scope: ['email', 'profile', 'openid'] })
 	);
 
 	//Callback Url
 	router.get(
 		'/google-oauth/callback',
-		passport.authenticate('google-oauth', { session: false }),
+		passport.authenticate('google', { session: false }),
 		(req, res, next) => {
 			if (!req.user) {
 				next(boom.unauthorized());
