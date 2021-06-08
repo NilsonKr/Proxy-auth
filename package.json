@@ -18,6 +18,7 @@
 		"express-session": "^1.17.2",
 		"express-twitter": "0.0.1",
 		"passport": "^0.4.1",
+		"passport-facebook": "^3.0.0",
 		"passport-google-oauth": "^2.0.0",
 		"passport-http": "^0.3.0",
 		"passport-oauth": "^1.0.0",
