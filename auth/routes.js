@@ -11,6 +11,10 @@ require('./basicStrategy');
 
 require('./oauthStrategy');
 
+//Facebook OAuth Strategy
+
+require('./facebookStrategy.js');
+
 function authRoutes(app) {
 	const router = express.Router();
 	app.use('/auth', router);
@@ -25,6 +29,31 @@ function authRoutes(app) {
 	router.get(
 		'/google-oauth/callback',
 		passport.authenticate('google-oauth', { session: false }),
+		(req, res, next) => {
+			if (!req.user) {
+				next(boom.unauthorized());
+			}
+
+			const { token, user } = req.user;
+
+			res.cookie('token', token, {
+				httpOnly: !config.dev,
+				secure: !config.dev,
+			});
+
+			res.status(200).json(user);
+		}
+	);
+
+	//Start OAuth with Facebook
+
+	router.get('/facebook-oauth', passport.authenticate('facebook', { scope: ['email'] }));
+
+	//Facebook OAuth Callback
+
+	router.get(
+		'/facebook-oauth/callback',
+		passport.authenticate('facebook', { session: false }),
 		(req, res, next) => {
 			if (!req.user) {
 				next(boom.unauthorized());
