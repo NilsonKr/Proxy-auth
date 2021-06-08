@@ -11,6 +11,10 @@ require('./basicStrategy');
 
 require('./oauthStrategy');
 
+//Twitter OAuth Strategy
+
+require('./twitterStrategy');
+
 function authRoutes(app) {
 	const router = express.Router();
 	app.use('/auth', router);
@@ -25,6 +29,31 @@ function authRoutes(app) {
 	router.get(
 		'/google-oauth/callback',
 		passport.authenticate('google-oauth', { session: false }),
+		(req, res, next) => {
+			if (!req.user) {
+				next(boom.unauthorized());
+			}
+
+			const { token, user } = req.user;
+
+			res.cookie('token', token, {
+				httpOnly: !config.dev,
+				secure: !config.dev,
+			});
+
+			res.status(200).json(user);
+		}
+	);
+
+	//Start Twitter Oauth
+
+	router.get('/twitter-oauth', passport.authenticate('twitter'));
+
+	//Callback Twitter Oauth
+
+	router.get(
+		'/twitter-oauth/callback',
+		passport.authenticate('twitter', { session: false }),
 		(req, res, next) => {
 			if (!req.user) {
 				next(boom.unauthorized());
